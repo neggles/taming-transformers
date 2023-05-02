@@ -1,0 +1,10 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=61.0.0",
+  "wheel",
+  "setuptools-scm[toml]>=7.0.0",
+]
+
+[tool.setuptools_scm]
+write_to = "src/taming/_version.py"
