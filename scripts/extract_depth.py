@@ -7,6 +7,7 @@ from PIL import Image
 
 def get_state(gpu):
     import torch
+
     midas = torch.hub.load("intel-isl/MiDaS", "MiDaS")
     if gpu:
         midas.cuda()
@@ -15,8 +16,7 @@ def get_state(gpu):
     midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
     transform = midas_transforms.default_transform
 
-    state = {"model": midas,
-             "transform": transform}
+    state = {"model": midas, "transform": transform}
     return state
 
 
@@ -25,7 +25,7 @@ def depth_to_rgba(x):
     assert len(x.shape) == 2
     y = x.copy()
     y.dtype = np.uint8
-    y = y.reshape(x.shape+(4,))
+    y = y.reshape(x.shape + (4,))
     return np.ascontiguousarray(y)
 
 
@@ -58,7 +58,7 @@ def get_filename(relpath, level=-2):
     # save class folder structure and filename:
     fn = relpath.split(os.sep)[level:]
     folder = fn[-2]
-    file   = fn[-1].split('.')[0]
+    file = fn[-1].split(".")[0]
     return folder, file
 
 
@@ -84,10 +84,13 @@ def save_depth(dataset, path, debug=False):
 
 if __name__ == "__main__":
     from taming.data.imagenet import ImageNetTrain, ImageNetValidation
+
     out = "data/imagenet_depth"
     if not os.path.exists(out):
-        print("Please create a folder or symlink '{}' to extract depth data ".format(out) +
-              "(be prepared that the output size will be larger than ImageNet itself).")
+        print(
+            "Please create a folder or symlink '{}' to extract depth data ".format(out)
+            + "(be prepared that the output size will be larger than ImageNet itself)."
+        )
         exit(1)
 
     # go

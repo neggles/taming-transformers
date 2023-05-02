@@ -15,10 +15,11 @@ import torch.nn.functional as F
 # and put the path here
 CKPT_PATH = "TODO"
 
-rescale = lambda x: (x + 1.) / 2.
+rescale = lambda x: (x + 1.0) / 2.0
+
 
 def rescale_bgr(x):
-    x = (x+1)*127.5
+    x = (x + 1) * 127.5
     x = torch.flip(x, dims=[0])
     return x
 
@@ -34,10 +35,13 @@ class COCOStuffSegmenter(nn.Module):
         self.model = model
 
         normalize = torchvision.transforms.Normalize(mean=self.mean, std=self.std)
-        self.image_transform = torchvision.transforms.Compose([
-            torchvision.transforms.Lambda(lambda image: torch.stack(
-                [normalize(rescale_bgr(x)) for x in image]))
-        ])
+        self.image_transform = torchvision.transforms.Compose(
+            [
+                torchvision.transforms.Lambda(
+                    lambda image: torch.stack([normalize(rescale_bgr(x)) for x in image])
+                )
+            ]
+        )
 
     def forward(self, x, upsample=None):
         x = self._pre_process(x)
@@ -83,10 +87,10 @@ def get_input(batch, k):
 def save_segmentation(segmentation, path):
     # --> class label to uint8, save as png
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    assert len(segmentation.shape)==4
-    assert segmentation.shape[0]==1
+    assert len(segmentation.shape) == 4
+    assert segmentation.shape[0] == 1
     for seg in segmentation:
-        seg = seg.permute(1,2,0).numpy().squeeze().astype(np.uint8)
+        seg = seg.permute(1, 2, 0).numpy().squeeze().astype(np.uint8)
         seg = Image.fromarray(seg)
         seg.save(path)
 

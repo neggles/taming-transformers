@@ -8,3 +8,8 @@ requires = [
 
 [tool.setuptools_scm]
 write_to = "src/taming/_version.py"
+
+# see https://github.com/psf/black/issues/683 for why this can't be in setup.cfg
+[tool.black]
+line-length = 110
+target-version = ['py38', 'py39', 'py310']
